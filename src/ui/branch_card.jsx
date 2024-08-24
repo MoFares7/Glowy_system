@@ -1,25 +1,44 @@
-import { Box, Typography } from '@mui/material'
-import React from 'react'
-import { colors } from '../config/theme/colors'
-import { borders } from '../assets/theme/borders'
-import { fonts } from '../config/theme/fonts'
+import React, { useState } from 'react';
+import { Box, Typography, IconButton, Menu, MenuItem } from '@mui/material';
+import moreOptionsIcon from '../assets/icons/moreOption.svg';
+import { colors } from '../config/theme/colors';
+import { borders } from '../assets/theme/borders';
+import { fonts } from '../config/theme/fonts';
+import { MoreVertOutlined } from '@mui/icons-material';
 
 const BranchCard = ({ image, title, subTitle, status }) => {
+    const [anchorEl, setAnchorEl] = useState(null);
+    const open = Boolean(anchorEl);
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
     return (
         <Box sx={{
-            borderRadius:borders.borderRadius.sm,
+            borderRadius: borders.borderRadius.sm,
             textAlign: 'center',
-            py:3,
+            py: 3,
             px: 2,
-            border: `1px solid ${colors.secondary.main}`
+            border: `1px solid ${colors.secondary.main}`,
+            position: 'relative'
         }}>
-
+   <IconButton
+                sx={{ position: 'absolute', top: 8, right: 8 }}
+                onClick={handleClick}
+            >
+                <MoreVertOutlined />
+            </IconButton>
             <Box sx={{
                 mb: 2,
                 '& img': {
-                    width: '100', 
-                    height: '100', 
-                    objectFit: 'cover',
+                    width: 100,
+                    height: 100,
+                    objectFit: 'contain',
                     borderRadius: 0
                 }
             }}>
@@ -30,18 +49,30 @@ const BranchCard = ({ image, title, subTitle, status }) => {
             <Typography typography={fonts.subtitle1} sx={{ color: colors.text.secondary }}>{subTitle}</Typography>
 
             <Box sx={{
-                mt:2,
-                mx:10,
+                mt: 2,
+                mx: 10,
                 py: 0.5,
-                // width:'250px',
                 borderRadius: borders.borderRadius.lg,
                 color: status === 'Active' ? colors.success?.main : colors.error?.main,
                 backgroundColor: status === 'Active' ? colors.success?.state : colors.error?.state
             }}>
                 {status}
             </Box>
+
+         
+
+            <Menu
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+            >
+                <MenuItem onClick={handleClose}>Action 1</MenuItem>
+                <MenuItem onClick={handleClose}>Action 2</MenuItem>
+                <MenuItem onClick={handleClose}>Action 3</MenuItem>
+            </Menu>
+
         </Box>
-    )
+    );
 }
 
-export default BranchCard
+export default BranchCard;

@@ -7,13 +7,14 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Checkbox from '@mui/material/Checkbox';
+import { TableSortLabel, Box, IconButton } from '@mui/material';
 import { colors } from '../../config/theme/colors';
-import person from '../../assets/images/image.png';
-import { Box, IconButton } from '@mui/material';
 import { borders } from '../../assets/theme/borders';
+import person from '../../assets/images/image.png';
 import moreActionIcon from '../../assets/icons/moreOption.svg';
+import sortIcon from '../../assets/icons/sort.svg';
 
-// Styled TableCell for header and body
+// Styled components for table cells and rows
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
         backgroundColor: '#F1F1F1',
@@ -30,7 +31,6 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     },
 }));
 
-
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
     '&:last-child td, &:last-child th': {
         border: 0,
@@ -39,14 +39,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 // Function to create data rows
 function createData(
-    image: string,
-    branchName: string,
-    address: string,
-    description: string,
-    status: string,
-    createdAt: string,
-    createdBy: string,
-    action: string
+    image, branchName, address, description, status, createdAt, createdBy, action
 ) {
     return { image, branchName, address, description, status, createdAt, createdBy, action };
 }
@@ -55,27 +48,31 @@ function createData(
 const rows = [
     createData(person, 'Frozen yoghurt', 'Address 1', 'Delicious', 'Active', '2024-08-22', 'Admin', 'Edit'),
     createData(person, 'Ice cream sandwich', 'Address 2', 'Tasty', 'Inactive', '2024-08-21', 'User', 'Edit'),
-    createData(person, 'Eclair1', 'Address 3', 'Sweet', 'Active', 'Active', '2024-08-21', 'Edit'),
-    createData(person, 'Cupcake', 'Address 4', 'Yummy', 'Inactive', 'Active', '2024-08-21', 'Edit'),
-    createData(person, 'Eclair2', 'Address 12', 'Yummy', 'Active', 'Active', '2024-08-21', 'Edit'),
-    createData(person, 'Frozen', 'Address 2', 'Yummy', 'Inactive', 'Active', '2024-08-21', 'Edit'),
-    createData(person, 'Eclair3', 'Address 323', 'Yummy', 'Active', 'Active', '2024-08-21', 'Edit'),
+    createData(person, 'Eclair1', 'Address 3', 'Sweet', 'Active', '2024-08-21', 'Admin', 'Edit'),
+    createData(person, 'Cupcake', 'Address 4', 'Yummy', 'Inactive', '2024-08-21', 'User', 'Edit'),
+    createData(person, 'Eclair2', 'Address 12', 'Yummy', 'Active', '2024-08-21', 'Admin', 'Edit'),
+    createData(person, 'Frozen', 'Address 2', 'Yummy', 'Inactive', '2024-08-21', 'User', 'Edit'),
+    createData(person, 'Eclair3', 'Address 323', 'Yummy', 'Active', '2024-08-21', 'Admin', 'Edit'),
 ];
 
-export default function MainInformationTable() {
-    const [selected, setSelected] = useState<string[]>([]);
+export default function MainInformationTable({ selected, onSelect }) {
+    const [order, setOrder] = useState('asc');
+    const [orderBy, setOrderBy] = useState('branchName');
 
-    const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
+    // Handle select all checkbox
+    const handleSelectAllClick = (event) => {
         if (event.target.checked) {
-            setSelected(rows.map(row => row.branchName));
+            const newSelecteds = rows.map((row) => row.branchName);
+            onSelect(newSelecteds);
             return;
         }
-        setSelected([]);
+        onSelect([]);
     };
 
-    const handleClick = (branchName: string) => {
+    // Handle individual row click
+    const handleClick = (branchName) => {
         const selectedIndex = selected.indexOf(branchName);
-        let newSelected: string[] = [];
+        let newSelected = [];
 
         if (selectedIndex === -1) {
             newSelected = newSelected.concat(selected, branchName);
@@ -90,13 +87,31 @@ export default function MainInformationTable() {
             );
         }
 
-        setSelected(newSelected);
+        onSelect(newSelected);
     };
 
-    const isSelected = (branchName: string) => selected.indexOf(branchName) !== -1;
+    // Handle sorting request
+    const handleRequestSort = (property) => {
+        const isAsc = orderBy === property && order === 'asc';
+        setOrder(isAsc ? 'desc' : 'asc');
+        setOrderBy(property);
+    };
+
+    const isSelected = (branchName) => selected.indexOf(branchName) !== -1;
+
+    // Sort the rows based on the selected column and order
+    const sortedRows = rows.sort((a, b) => {
+        if (orderBy) {
+            const aValue = a[orderBy];
+            const bValue = b[orderBy];
+            if (aValue < bValue) return order === 'asc' ? -1 : 1;
+            if (aValue > bValue) return order === 'asc' ? 1 : -1;
+        }
+        return 0;
+    });
 
     return (
-        <TableContainer >
+        <TableContainer>
             <Table sx={{ minWidth: 700 }} aria-label="customized table">
                 <TableHead>
                     <TableRow>
@@ -107,18 +122,74 @@ export default function MainInformationTable() {
                                 indeterminate={selected.length > 0 && selected.length < rows.length}
                             />
                         </StyledTableCell>
-                        <StyledTableCell>IMAGE</StyledTableCell>
-                        <StyledTableCell align="center">BRANCH NAME</StyledTableCell>
-                        <StyledTableCell align="center">ADDRESS</StyledTableCell>
-                        <StyledTableCell align="center">DESCRIPTION</StyledTableCell>
-                        <StyledTableCell align="center">STATUS</StyledTableCell>
-                        <StyledTableCell align="center">CREATED AT</StyledTableCell>
-                        <StyledTableCell align="center">CREATED BY</StyledTableCell>
+                        <StyledTableCell>
+                            IMAGE
+                        </StyledTableCell>
+                        <StyledTableCell align="center">
+                            <TableSortLabel
+                                active={orderBy === 'branchName'}
+                                direction={orderBy === 'branchName' ? order : 'asc'}
+                                onClick={() => handleRequestSort('branchName')}
+                                IconComponent={() => <img src={sortIcon} alt="Sort" style={{ padding: '4px' }} />}
+                            >
+                                BRANCH NAME
+                            </TableSortLabel>
+                        </StyledTableCell>
+                        <StyledTableCell align="center">
+                            <TableSortLabel
+                                active={orderBy === 'address'}
+                                direction={orderBy === 'address' ? order : 'asc'}
+                                onClick={() => handleRequestSort('address')}
+                                IconComponent={() => <img src={sortIcon} alt="Sort" style={{ padding: '4px' }} />}
+                            >
+                                ADDRESS
+                            </TableSortLabel>
+                        </StyledTableCell>
+                        <StyledTableCell align="center">
+                            <TableSortLabel
+                                active={orderBy === 'description'}
+                                direction={orderBy === 'description' ? order : 'asc'}
+                                onClick={() => handleRequestSort('description')}
+                                IconComponent={() => <img src={sortIcon} alt="Sort" style={{ padding: '4px' }} />}
+                            >
+                                DESCRIPTION
+                            </TableSortLabel>
+                        </StyledTableCell>
+                        <StyledTableCell align="center">
+                            <TableSortLabel
+                                active={orderBy === 'status'}
+                                direction={orderBy === 'status' ? order : 'asc'}
+                                onClick={() => handleRequestSort('status')}
+                                IconComponent={() => <img src={sortIcon} alt="Sort" style={{ padding: '4px' }} />}
+                            >
+                                STATUS
+                            </TableSortLabel>
+                        </StyledTableCell>
+                        <StyledTableCell align="center">
+                            <TableSortLabel
+                                active={orderBy === 'createdAt'}
+                                direction={orderBy === 'createdAt' ? order : 'asc'}
+                                onClick={() => handleRequestSort('createdAt')}
+                                IconComponent={() => <img src={sortIcon} alt="Sort" style={{ padding: '4px' }} />}
+                            >
+                                CREATED AT
+                            </TableSortLabel>
+                        </StyledTableCell>
+                        <StyledTableCell align="center">
+                            <TableSortLabel
+                                active={orderBy === 'createdBy'}
+                                direction={orderBy === 'createdBy' ? order : 'asc'}
+                                onClick={() => handleRequestSort('createdBy')}
+                                IconComponent={() => <img src={sortIcon} alt="Sort" style={{ padding: '4px' }} />}
+                            >
+                                CREATED BY
+                            </TableSortLabel>
+                        </StyledTableCell>
                         <StyledTableCell align="center">ACTION</StyledTableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {rows.map((row) => (
+                    {sortedRows.map((row) => (
                         <StyledTableRow key={row.branchName}>
                             <StyledTableCell padding="checkbox" align="center">
                                 <Checkbox
@@ -136,7 +207,6 @@ export default function MainInformationTable() {
                                         },
                                     }}
                                 />
-
                             </StyledTableCell>
                             <StyledTableCell component="th" scope="row">
                                 <img
@@ -153,23 +223,22 @@ export default function MainInformationTable() {
                                     py: 0.5,
                                     borderRadius: borders.borderRadius.lg,
                                     color: row.status === 'Active' ? colors.success?.main : colors.error?.main,
-                                    backgroundColor: row.status === 'Active' ? colors.success?.state : colors.error?.state
+                                    backgroundColor: row.status === 'Active' ? colors.success?.state : colors.error?.state,
                                 }}>
                                     {row.status}
                                 </Box>
-
                             </StyledTableCell>
                             <StyledTableCell align="center">{row.createdAt}</StyledTableCell>
                             <StyledTableCell align="center">{row.createdBy}</StyledTableCell>
                             <StyledTableCell align="center">
-                                <IconButton>
-                                    <img src={moreActionIcon} />
+                                <IconButton aria-label="more options">
+                                    <img src={moreActionIcon} alt="More options" />
                                 </IconButton>
                             </StyledTableCell>
                         </StyledTableRow>
                     ))}
                 </TableBody>
             </Table>
-        </TableContainer>
+        </TableContainer >
     );
 }
