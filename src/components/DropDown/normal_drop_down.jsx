@@ -1,10 +1,9 @@
 import React from 'react';
 import { TextField, MenuItem, Typography } from '@mui/material';
-import { fonts } from '../../config/theme/fonts';
-import { colors } from '../../config/theme/colors';
+import { colors } from '../../assets/theme/colors';
 import { borders } from '../../assets/theme/borders';
 
-const DropDownField = ({
+const NormalDropDownField = ({
     height,
     margin,
     isFullWidth,
@@ -58,7 +57,7 @@ const DropDownField = ({
             }}
         >
             {options && options.map((option) => (
-                <MenuItem key={option.value} value={option.value} sx={{ fontSize: '0.875rem' }}>
+                <MenuItem key={option.value} value={option.value} sx={{ fontSize: '1rem' }}>
                     {option.label}
                 </MenuItem>
             ))}
@@ -67,4 +66,4 @@ const DropDownField = ({
     );
 };
 
-export default DropDownField;
+export default NormalDropDownField;

@@ -8,7 +8,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Checkbox from '@mui/material/Checkbox';
 import { TableSortLabel, Box, IconButton } from '@mui/material';
-import { colors } from '../../config/theme/colors';
+import { colors } from '../../assets/theme/colors';
 import { borders } from '../../assets/theme/borders';
 import person from '../../assets/images/image.png';
 import moreActionIcon from '../../assets/icons/moreOption.svg';

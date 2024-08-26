@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { Box, Typography, IconButton, Menu, MenuItem } from '@mui/material';
-import moreOptionsIcon from '../assets/icons/moreOption.svg';
-import { colors } from '../config/theme/colors';
-import { borders } from '../assets/theme/borders';
-import { fonts } from '../config/theme/fonts';
+import { colors } from '../../../assets/theme/colors';
+import { borders } from '../../../assets/theme/borders';
 import { MoreVertOutlined } from '@mui/icons-material';
+import { fonts } from '../../../assets/theme/fonts';
 
 const BranchCard = ({ image, title, subTitle, status }) => {
     const [anchorEl, setAnchorEl] = useState(null);
@@ -27,7 +26,7 @@ const BranchCard = ({ image, title, subTitle, status }) => {
             border: `1px solid ${colors.secondary.main}`,
             position: 'relative'
         }}>
-   <IconButton
+            <IconButton
                 sx={{ position: 'absolute', top: 8, right: 8 }}
                 onClick={handleClick}
             >
@@ -59,7 +58,7 @@ const BranchCard = ({ image, title, subTitle, status }) => {
                 {status}
             </Box>
 
-         
+
 
             <Menu
                 anchorEl={anchorEl}

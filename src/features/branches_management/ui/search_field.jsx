@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { TextField, Box, IconButton } from '@mui/material';
-import { colors } from '../config/theme/colors';
-import searchField from '../assets/images/search_field.svg';
-import searchFieldSelected from '../assets/images/search_field_selected.svg';
+import { colors } from '../../../assets/theme/colors';
+import searchField from '../../../assets/images/search_field.svg';
+import searchFieldSelected from '../../../assets/images/search_field_selected.svg';
 import { SearchSharp } from '@mui/icons-material';
 
 const SearchField = () => {

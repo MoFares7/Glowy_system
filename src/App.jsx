@@ -3,9 +3,10 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Sidebar from './components/Sidenav/sidebar';
 import './App.css';
 import Navbars from './components/Navbars';
-import { useTheme } from './config/theme/useTheme';
-import BranchesPage from './pages/branches_page';
-import { colors } from './config/theme/colors';
+import { useTheme } from './assets/theme/useTheme';
+import BranchesPage from './features/branches_management/pages/branches_page';
+import { colors } from './assets/theme/colors';
+
 
 function App() {
   const [theme] = useTheme();

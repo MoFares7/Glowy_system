@@ -1,7 +1,7 @@
 import { Box, Typography } from '@mui/material';
 import React from 'react';
-import SearchField from '../../../ui/search_field';
-import { colors } from '../../../config/theme/colors';
+import SearchField from '../../../features/branches_management/ui/search_field';
+import { colors } from '../../../assets/theme/colors';
 import { borders } from '../../../assets/theme/borders';
 import PrimaryButton from '../../Buttons/primary_button';
 import layoutFormIcon from '../../../assets/icons/layout.svg';
@@ -9,9 +9,9 @@ import layoutGridIcon from '../../../assets/icons/grid.svg';
 import plusIcon from '../../../assets/icons/plus.svg';
 import moreOptionIcon from '../../../assets/icons/moreOption.svg';
 import xIcon from '../../../assets/icons/x.svg';
-import { fonts } from '../../../config/theme/fonts';
+import { fonts } from '../../../assets/theme/fonts';
 
-const HeaderLayout = ({ viewMode, setViewMode, selectedCount }) => {
+const HeaderLayout = ({ viewMode, setViewMode, selectedCount, handleAddBranch }) => {
     return (
         <Box sx={{ pb: 3, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <SearchField />
@@ -27,7 +27,7 @@ const HeaderLayout = ({ viewMode, setViewMode, selectedCount }) => {
                         <Typography typography={fonts.subtitle1}>
                             {selectedCount} Branch(S) Selected
                         </Typography>
-                        
+
                         <PrimaryButton
                             isDark={false}
                             isIcon={true}
@@ -72,12 +72,15 @@ const HeaderLayout = ({ viewMode, setViewMode, selectedCount }) => {
                         </Box>
                         <PrimaryButton
                             title={'Add'}
+                            fontType={fonts.subtitle1}
                             hoverColor={colors.primary.state}
                             colorTitle={colors.background.paper}
                             icon={plusIcon}
-                            isDark={true}
+                            backgroundColor={colors.primary.main}
                             isIcon={false}
                             borderRadius={borders.borderRadius.sm}
+                            onClick={handleAddBranch}
+                            isTitleAndIcon={true}
                         />
                         <PrimaryButton
                             isDark={false}

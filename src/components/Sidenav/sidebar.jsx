@@ -11,7 +11,7 @@ import circularOutlined from '../../assets/icons/circular-outlined.svg';
 import circularOutlinedDark from '../../assets/icons/circular-outlined-dark.svg';
 import arrowRight from '../../assets/icons/arrow-right.svg';
 import { styled } from '@mui/system';
-import { colors } from '../../config/theme/colors';
+import { colors } from '../../assets/theme/colors';
 import { ListItemStyle } from './styles';
 import { borders } from '../../assets/theme/borders';
 

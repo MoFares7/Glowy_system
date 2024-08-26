@@ -40,7 +40,7 @@ export const colors: PaletteOptions = {
   },
   info: {
     main: "#FF4359",
-    light: "#43FF78",
+    light: "#F1F1F1",
   },
   success: {
     main: '#00796B',

@@ -10,7 +10,7 @@ import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import { Box, Typography } from '@mui/material';
-import { colors } from '../../config/theme/colors';
+import { colors } from '../../assets/theme/colors';
 import settingsIcon from '../../assets/icons/settings.svg';
 import chatIcon from '../../assets/icons/chat.svg';
 import darkIcon from '../../assets/icons/darkIcon.svg';

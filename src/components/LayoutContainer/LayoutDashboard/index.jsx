@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Box } from '@mui/material';
 import Sidebar from '../../Sidenav/sidebar';
-import { colors } from '../../../config/theme/colors';
+import { colors } from '../../../assets/theme/colors'
 
 const DashboardLayout = ({ children }) => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
