@@ -13,6 +13,7 @@ const PrimaryButton = ({
     isTitleAndIcon,
     isIcon,
     icon,
+    fontSize,
     onClick
 }) => {
     return (
@@ -41,9 +42,9 @@ const PrimaryButton = ({
             ) : (
                 <Box display="flex" alignItems="center">
                     {isTitleAndIcon && (
-                        <img src={icon} alt="icon" style={{ width: 24, height: 24, marginRight: 8 }} />
+                        <img src={icon} alt="icon" style={{ width: 24, height: 24 }} />
                     )}
-                    <Typography variant={fontType} mx={0.5}>
+                    <Typography variant={fontType} fontSize={fontSize} mx={0.5}>
                         {title}
                     </Typography>
                 </Box>

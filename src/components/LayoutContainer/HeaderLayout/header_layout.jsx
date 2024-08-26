@@ -73,6 +73,7 @@ const HeaderLayout = ({ viewMode, setViewMode, selectedCount, handleAddBranch })
                         <PrimaryButton
                             title={'Add'}
                             fontType={fonts.subtitle1}
+                            fontSize={17.5}
                             hoverColor={colors.primary.state}
                             colorTitle={colors.background.paper}
                             icon={plusIcon}
