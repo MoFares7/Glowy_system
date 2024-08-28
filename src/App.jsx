@@ -1,12 +1,12 @@
+// App.js
 import React, { useState, useEffect } from 'react';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { ThemeProvider } from '@mui/material/styles';
 import Sidebar from './components/Sidenav/sidebar';
-import './App.css';
 import Navbars from './components/Navbars';
 import { useTheme } from './assets/theme/useTheme';
-import BranchesPage from './features/branches_management/pages/branches_page';
 import { colors } from './assets/theme/colors';
-
+import RoutesManagement from './routes/routes';
 
 function App() {
   const [theme] = useTheme();
@@ -38,19 +38,25 @@ function App() {
     setIsSidebarOpen((prev) => !prev);
   };
 
+  const handleSidebarClose = () => {
+    setIsSidebarOpen(false);
+  };
+
   return (
     <ThemeProvider theme={theme}>
-      <div style={{ backgroundColor: colors.background.default }}>
-        <Sidebar
-          isOpen={isSidebarOpen}
-          isMini={isMiniSidebar}
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
-        />
-        <Navbars onSidebarToggle={toggleSidebar} />
-        <BranchesPage />
-      </div>
-
+      <Router>
+        <div style={{ backgroundColor: colors.background.default }}>
+          <Sidebar
+            isOpen={isSidebarOpen}
+            isMini={isMiniSidebar}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            onClose={handleSidebarClose}
+          />
+          <Navbars onSidebarToggle={toggleSidebar} />
+          <RoutesManagement />
+        </div>
+      </Router>
     </ThemeProvider>
   );
 }

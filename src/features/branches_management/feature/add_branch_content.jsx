@@ -28,8 +28,7 @@ const AddBranchContent = ({ setDrawerOpen }) => {
     const [selectedDays, setSelectedDays] = useState([]);
     const [isWeeklySelectorVisible, setIsWeeklySelectorVisible] = useState(false);
 
-    // Function to toggle the visibility of the WeeklyTimeSelector
-    const handleDropdownClick = () => {
+    const handleShowViewStandardHours = () => {
         isWeeklySelectorVisible === true ?
             setIsWeeklySelectorVisible(false) : setIsWeeklySelectorVisible(true)
         console.log(isWeeklySelectorVisible)
@@ -170,6 +169,26 @@ const AddBranchContent = ({ setDrawerOpen }) => {
                 />
 
                 <Controller
+                    name="branchNameTR"
+                    control={control}
+                    defaultValue=""
+                    rules={{ required: 'Branch Name in Turkish is required' }}
+                    render={({ field }) => (
+                        <MDTextField
+                            {...field}
+                            label={
+                                <>
+                                    Branch Name In TR
+                                    <span style={{ color: colors.error.main, marginLeft: '8px' }}>*</span>
+                                </>
+                            }
+                            isFulWidth={true}
+                            type={'text'}
+                        />
+                    )}
+                />
+
+                <Controller
                     name="branchAddressEN"
                     control={control}
                     defaultValue=""
@@ -200,6 +219,26 @@ const AddBranchContent = ({ setDrawerOpen }) => {
                             label={
                                 <>
                                     Name Address In AR
+                                    <span style={{ color: colors.error.main, marginLeft: '8px' }}>*</span>
+                                </>
+                            }
+                            isFulWidth={true}
+                            type={'text'}
+                        />
+                    )}
+                />
+
+                <Controller
+                    name="branchAddressTR"
+                    control={control}
+                    defaultValue=""
+                    rules={{ required: 'Branch Address in Turkish is required' }}
+                    render={({ field }) => (
+                        <MDTextField
+                            {...field}
+                            label={
+                                <>
+                                    Name Address In TR
                                     <span style={{ color: colors.error.main, marginLeft: '8px' }}>*</span>
                                 </>
                             }
@@ -253,8 +292,32 @@ const AddBranchContent = ({ setDrawerOpen }) => {
                     )}
                 />
 
+                <Controller
+                    name="branchDescriptionTR"
+                    control={control}
+                    defaultValue=""
+                    rules={{ required: 'Branch Description in Turkish is required' }}
+                    render={({ field }) => (
+                        <MDTextField
+                            {...field}
+                            label={
+                                <>
+                                    Branch Description In TR
+                                    <span style={{ color: colors.error.main, marginLeft: '8px' }}>*</span>
+                                </>
+                            }
+                            isFulWidth={true}
+                            type={'text'}
+                            multiline={true}
+                            rows={4}
+                        />
+                    )}
+                />
+
+                {/* Contact Numbers Section */}
                 <ContactNumbersSection control={control} />
 
+                {/* Standard hours Section */}
                 <Controller
                     name="selectedDays"
                     control={control}
@@ -272,19 +335,17 @@ const AddBranchContent = ({ setDrawerOpen }) => {
                             type={'text'}
                             hintText={'CONFIGURE THE STANDARD HOURS OF OPERATION'}
                             icon={isWeeklySelectorVisible ? <ArrowDropUp /> : <ArrowDropDown />}
-                            onClick={handleDropdownClick}
+                            onClick={handleShowViewStandardHours}
                         />
                     )}
                 />
 
-                {/* Conditionally render WeeklyTimeSelector based on dropdown click */}
                 {isWeeklySelectorVisible && (
                     <WeeklyTimeSelector
                         selectedDays={selectedDays}
                         onSelectedDaysChange={setSelectedDays}
                     />
                 )}
-
 
                 {/* Options */}
                 <Box sx={{

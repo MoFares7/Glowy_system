@@ -25,7 +25,7 @@ export const fonts = {
   },
   h6: {
     fontFamily: MAIN_FONT,
-    fontSize: 20,
+    fontSize: 21,
   },
   body1: {
     fontFamily: MAIN_FONT,

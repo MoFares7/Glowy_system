@@ -37,8 +37,9 @@ const BranchCard = ({ image, title, subTitle, status }) => {
                 '& img': {
                     width: 100,
                     height: 100,
-                    objectFit: 'contain',
-                    borderRadius: 0
+                    objectFit: 'cover',
+                    borderRadius: borders.borderRadius.md,
+                    backgroundColor:'red'
                 }
             }}>
                 <img src={image} alt={title} />

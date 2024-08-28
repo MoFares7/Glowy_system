@@ -28,8 +28,8 @@ declare module "@mui/material/styles" {
 }
 export const colors: PaletteOptions = {
   primary: {
-    default: "#9F6069",
-    main: "#9F6069",
+    default: "#70434A",
+    main: "#70434A",
     state: '#885e64',
     error: "#B40000",
   },
