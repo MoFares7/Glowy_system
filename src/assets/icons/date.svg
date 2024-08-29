@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="27.599" height="27.599" viewBox="0 0 27.599 27.599">
+  <g id="vuesax_outline_hierarchy-2" data-name="vuesax/outline/hierarchy-2" transform="translate(-40 -272)">
+    <g id="hierarchy-2" transform="translate(40 272)">
+      <path id="Vector" d="M0,0H27.6V27.6H0Z" fill="none" opacity="0"/>
+      <g id="Group_4" data-name="Group 4" transform="translate(-820.329 -240.347)">
+        <path id="Path_52" data-name="Path 52" d="M841.549,254.3H826.707a2.012,2.012,0,0,0-2.008,2.008v14.842a2.012,2.012,0,0,0,2.007,2.007h14.842a2.012,2.012,0,0,0,2.007-2.007V256.307A2.012,2.012,0,0,0,841.549,254.3Z" transform="translate(0 -8.364)" fill="none" stroke="#70434a" stroke-linecap="round" stroke-miterlimit="10" stroke-width="1.5"/>
+        <line id="Line_25" data-name="Line 25" x2="4.782" transform="translate(828.737 252.567)" fill="none" stroke="#70434a" stroke-linecap="round" stroke-miterlimit="10" stroke-width="1.5"/>
+        <line id="Line_26" data-name="Line 26" x2="10.353" transform="translate(828.737 256.695)" fill="none" stroke="#70434a" stroke-linecap="round" stroke-miterlimit="10" stroke-width="1.5"/>
+        <line id="Line_27" data-name="Line 27" y2="4.421" transform="translate(831.219 243.5)" fill="none" stroke="#70434a" stroke-linecap="round" stroke-miterlimit="10" stroke-width="1.5"/>
+        <line id="Line_28" data-name="Line 28" y2="4.421" transform="translate(837.038 243.5)" fill="none" stroke="#70434a" stroke-linecap="round" stroke-miterlimit="10" stroke-width="1.5"/>
+      </g>
+    </g>
+  </g>
+</svg>

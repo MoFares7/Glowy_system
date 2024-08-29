@@ -1,31 +1,32 @@
-import { PaletteOptions } from "@mui/material";
+import { PaletteOptions } from '@mui/material/styles';
 
 declare module "@mui/material/styles" {
   interface PaletteColor {
-    default?: string;
-    state?: string;
+    default: string;
+    state: string;
     error?: string;
   }
   interface SimplePaletteColorOptions {
-    default?: string;
-    state?: string;
+    default: string;
+    state: string;
     error?: string;
   }
   interface Theme {
     background: {
       default: string;
       primary: string;
-      state?: string;
+      state: string;
     };
   }
   interface ThemeOptions {
-    background?: {
-      default?: string;
-      primary?: string;
-      state?: string;
+    background: {
+      default: string;
+      primary: string;
+      state: string;
     };
   }
 }
+
 export const colors: PaletteOptions = {
   primary: {
     default: "#70434A",

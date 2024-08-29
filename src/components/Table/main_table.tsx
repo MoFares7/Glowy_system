@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+// MainInformationTable.tsx
+import React from 'react';
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -13,8 +14,24 @@ import { borders } from '../../assets/theme/borders';
 import person from '../../assets/images/image.png';
 import moreActionIcon from '../../assets/icons/moreOption.svg';
 import sortIcon from '../../assets/icons/sort.svg';
+import { useTableLogic } from '../../hook/use_table';
 
-// Styled components for table cells and rows
+interface Row {
+    image: string;
+    branchName: string;
+    address: string;
+    description: string;
+    status: string;
+    createdAt: string;
+    createdBy: string;
+    action: string;
+}
+
+interface MainInformationTableProps {
+    selected: string[];
+    onSelect: (selected: string[]) => void;
+}
+
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
         backgroundColor: '#F1F1F1',
@@ -35,80 +52,30 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     '&:last-child td, &:last-child th': {
         border: 0,
     },
+    cursor: 'pointer',
 }));
 
-// Function to create data rows
-function createData(
-    image, branchName, address, description, status, createdAt, createdBy, action
-) {
-    return { image, branchName, address, description, status, createdAt, createdBy, action };
-}
-
-// Sample data rows
-const rows = [
-    createData(person, 'Frozen yoghurt', 'Address 1', 'Delicious', 'Active', '2024-08-22', 'Admin', 'Edit'),
-    createData(person, 'Ice cream sandwich', 'Address 2', 'Tasty', 'Inactive', '2024-08-21', 'User', 'Edit'),
-    createData(person, 'Eclair1', 'Address 3', 'Sweet', 'Active', '2024-08-21', 'Admin', 'Edit'),
-    createData(person, 'Cupcake', 'Address 4', 'Yummy', 'Inactive', '2024-08-21', 'User', 'Edit'),
-    createData(person, 'Eclair2', 'Address 12', 'Yummy', 'Active', '2024-08-21', 'Admin', 'Edit'),
-    createData(person, 'Frozen', 'Address 2', 'Yummy', 'Inactive', '2024-08-21', 'User', 'Edit'),
-    createData(person, 'Eclair3', 'Address 323', 'Yummy', 'Active', '2024-08-21', 'Admin', 'Edit'),
+const rows: Row[] = [
+    { image: person, branchName: 'Frozen yoghurt', address: 'Address 1', description: 'Delicious', status: 'Active', createdAt: '2024-08-22', createdBy: 'Admin', action: 'Edit' },
+    { image: person, branchName: 'Ice cream sandwich', address: 'Address 2', description: 'Tasty', status: 'Inactive', createdAt: '2024-08-21', createdBy: 'User', action: 'Edit' },
+    { image: person, branchName: 'Eclair1', address: 'Address 3', description: 'Sweet', status: 'Active', createdAt: '2024-08-21', createdBy: 'Admin', action: 'Edit' },
+    { image: person, branchName: 'Cupcake', address: 'Address 4', description: 'Yummy', status: 'Inactive', createdAt: '2024-08-21', createdBy: 'User', action: 'Edit' },
+    { image: person, branchName: 'Eclair2', address: 'Address 12', description: 'Yummy', status: 'Active', createdAt: '2024-08-21', createdBy: 'Admin', action: 'Edit' },
+    { image: person, branchName: 'Frozen', address: 'Address 2', description: 'Yummy', status: 'Inactive', createdAt: '2024-08-21', createdBy: 'User', action: 'Edit' },
+    { image: person, branchName: 'Eclair3', address: 'Address 323', description: 'Yummy', status: 'Active', createdAt: '2024-08-21', createdBy: 'Admin', action: 'Edit' },
 ];
 
-export default function MainInformationTable({ selected, onSelect }) {
-    const [order, setOrder] = useState('asc');
-    const [orderBy, setOrderBy] = useState('branchName');
-
-    // Handle select all checkbox
-    const handleSelectAllClick = (event) => {
-        if (event.target.checked) {
-            const newSelecteds = rows.map((row) => row.branchName);
-            onSelect(newSelecteds);
-            return;
-        }
-        onSelect([]);
-    };
-
-    // Handle individual row click
-    const handleClick = (branchName) => {
-        const selectedIndex = selected.indexOf(branchName);
-        let newSelected = [];
-
-        if (selectedIndex === -1) {
-            newSelected = newSelected.concat(selected, branchName);
-        } else if (selectedIndex === 0) {
-            newSelected = newSelected.concat(selected.slice(1));
-        } else if (selectedIndex === selected.length - 1) {
-            newSelected = newSelected.concat(selected.slice(0, -1));
-        } else if (selectedIndex > 0) {
-            newSelected = newSelected.concat(
-                selected.slice(0, selectedIndex),
-                selected.slice(selectedIndex + 1),
-            );
-        }
-
-        onSelect(newSelected);
-    };
-
-    // Handle sorting request
-    const handleRequestSort = (property) => {
-        const isAsc = orderBy === property && order === 'asc';
-        setOrder(isAsc ? 'desc' : 'asc');
-        setOrderBy(property);
-    };
-
-    const isSelected = (branchName) => selected.indexOf(branchName) !== -1;
-
-    // Sort the rows based on the selected column and order
-    const sortedRows = rows.sort((a, b) => {
-        if (orderBy) {
-            const aValue = a[orderBy];
-            const bValue = b[orderBy];
-            if (aValue < bValue) return order === 'asc' ? -1 : 1;
-            if (aValue > bValue) return order === 'asc' ? 1 : -1;
-        }
-        return 0;
-    });
+export default function MainInformationTable({ selected, onSelect }: MainInformationTableProps) {
+    const {
+        order,
+        orderBy,
+        handleSelectAllClick,
+        handleRowClick,
+        handleCheckboxClick,
+        handleRequestSort,
+        isSelected,
+        sortedRows,
+    } = useTableLogic(rows, selected, onSelect);
 
     return (
         <TableContainer>
@@ -122,9 +89,7 @@ export default function MainInformationTable({ selected, onSelect }) {
                                 indeterminate={selected.length > 0 && selected.length < rows.length}
                             />
                         </StyledTableCell>
-                        <StyledTableCell>
-                            IMAGE
-                        </StyledTableCell>
+                        <StyledTableCell>IMAGE</StyledTableCell>
                         <StyledTableCell align="center">
                             <TableSortLabel
                                 active={orderBy === 'branchName'}
@@ -190,11 +155,14 @@ export default function MainInformationTable({ selected, onSelect }) {
                 </TableHead>
                 <TableBody>
                     {sortedRows.map((row) => (
-                        <StyledTableRow key={row.branchName}>
+                        <StyledTableRow
+                            key={row.branchName}
+                            onClick={() => handleRowClick(row.branchName)}
+                        >
                             <StyledTableCell padding="checkbox" align="center">
                                 <Checkbox
                                     checked={isSelected(row.branchName)}
-                                    onChange={() => handleClick(row.branchName)}
+                                    onClick={(event) => handleCheckboxClick(event, row.branchName)}
                                     inputProps={{ 'aria-labelledby': row.branchName }}
                                     sx={{
                                         color: colors.secondary?.light,
@@ -239,6 +207,6 @@ export default function MainInformationTable({ selected, onSelect }) {
                     ))}
                 </TableBody>
             </Table>
-        </TableContainer >
+        </TableContainer>
     );
 }

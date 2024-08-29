@@ -1,9 +1,8 @@
-// App.js
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
 import Sidebar from './components/Sidenav/sidebar';
-import Navbars from './components/Navbars';
+import Navbars from './components/Navbars/index';
 import { useTheme } from './assets/theme/useTheme';
 import { colors } from './assets/theme/colors';
 import RoutesManagement from './routes/routes';
