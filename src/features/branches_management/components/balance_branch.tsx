@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Box, Typography } from '@mui/material';
-import MDDateField from '../../../components/TextField/date_field';
-import NormalDropDownField from '../../../components/DropDown/normal_drop_down';
+import MDDateField from '../../../shared/components/TextField/date_field';
+import NormalDropDownField from '../../../shared/components/DropDown/normal_drop_down';
 import exportIcon from '../../../assets/icons/export.svg';
-import PrimaryButton from '../../../components/Buttons/primary_button';
+import PrimaryButton from '../../../shared/components/Buttons/primary_button';
 import { colors } from '../../../assets/theme/colors';
 import { fonts } from '../../../assets/theme/fonts';
 import { borders } from '../../../assets/theme/borders';

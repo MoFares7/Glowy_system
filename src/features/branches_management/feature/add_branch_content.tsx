@@ -1,37 +1,24 @@
 import React, { useState } from 'react';
 import { Box, Divider, IconButton, Typography } from '@mui/material';
-import { Controller, UseFormHandleSubmit, UseFormControl } from 'react-hook-form';
 import CloseIcon from '@mui/icons-material/Close';
+import { Controller } from 'react-hook-form';
 import { colors } from '../../../assets/theme/colors';
 import { fonts } from '../../../assets/theme/fonts';
 import gallery from '../../../assets/icons/gallery.svg';
-import PrimaryButton from '../../../components/Buttons/primary_button';
+import PrimaryButton from '../../../shared/components/Buttons/primary_button';
 import { borders } from '../../../assets/theme/borders';
-import MDTextField from '../../../components/TextField/text_field';
+import MDTextField from '../../../shared/components/TextField/text_field';
 import useBranchForm from '../hook/use_add_branch';
 import ContactNumbersSection from '../components/contact_numbers_section';
 import WeeklyTimeSelector from '../components/day_time_selector';
 import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material';
 import Map from '../hook/Map';
 
-interface FormData {
-    branchName: string;
-    branchNameAR: string;
-    branchNameTR: string;
-    branchAddressEN: string;
-    branchAddressAR: string;
-    branchAddressTR: string;
-    branchDescriptionEN: string;
-    branchDescriptionAR: string;
-    branchDescriptionTR: string;
-    selectedDays: string[];
-}
-
 interface AddBranchContentProps {
     setDrawerOpen: (isOpen: boolean) => void;
 }
 
-const AddBranchContent: React.FC<AddBranchContentProps> = ({ setDrawerOpen }) => {
+const AddBranchContent: React.FC<{ setDrawerOpen: (isOpen: boolean) => void }> = ({ setDrawerOpen }) => {
     const {
         selectedImage,
         control,
@@ -40,13 +27,21 @@ const AddBranchContent: React.FC<AddBranchContentProps> = ({ setDrawerOpen }) =>
         handleButtonClick,
         handleRemoveImage,
         onSubmit,
+        errors,
+        onMapLocationChange,
+        setValue
     } = useBranchForm();
 
-    const [selectedDays, setSelectedDays] = useState<string[]>([]);
     const [isWeeklySelectorVisible, setIsWeeklySelectorVisible] = useState<boolean>(false);
+    const [availableHours, setAvailableHours] = useState<any[]>([]);
 
     const handleShowViewStandardHours = () => {
         setIsWeeklySelectorVisible(prevState => !prevState);
+    };
+
+    const handleAvailableHoursChange = (hours: any[]) => {
+        setAvailableHours(hours);
+        setValue('availableHours', hours);
     };
 
     return (
@@ -143,9 +138,10 @@ const AddBranchContent: React.FC<AddBranchContentProps> = ({ setDrawerOpen }) =>
             </Box>
 
             <form onSubmit={handleSubmit(onSubmit)}>
+                {/* Branch Name Fields */}
                 <Controller
                     name="branchName"
-                    control={control as UseFormControl<FormData>}
+                    control={control}
                     defaultValue=""
                     rules={{ required: 'Branch Name in English is required' }}
                     render={({ field }) => (
@@ -153,19 +149,21 @@ const AddBranchContent: React.FC<AddBranchContentProps> = ({ setDrawerOpen }) =>
                             {...field}
                             label={
                                 <>
-                                    Branch Name In En
+                                    Branch Name In EN
                                     <span style={{ color: colors.error?.main, margin: '8px' }}>*</span>
                                 </>
                             }
                             isFulWidth={true}
-                            type={'text'}
+                            type="text"
+                            error={Boolean(errors.branchName)}
+                            helperText={errors.branchName?.message}
                         />
                     )}
                 />
 
                 <Controller
                     name="branchNameAR"
-                    control={control as UseFormControl<FormData>}
+                    control={control}
                     defaultValue=""
                     rules={{ required: 'Branch Name in Arabic is required' }}
                     render={({ field }) => (
@@ -178,14 +176,16 @@ const AddBranchContent: React.FC<AddBranchContentProps> = ({ setDrawerOpen }) =>
                                 </>
                             }
                             isFulWidth={true}
-                            type={'text'}
+                            type="text"
+                            error={Boolean(errors.branchNameAR)}
+                            helperText={errors.branchNameAR?.message}
                         />
                     )}
                 />
 
                 <Controller
                     name="branchNameTR"
-                    control={control as UseFormControl<FormData>}
+                    control={control}
                     defaultValue=""
                     rules={{ required: 'Branch Name in Turkish is required' }}
                     render={({ field }) => (
@@ -198,14 +198,17 @@ const AddBranchContent: React.FC<AddBranchContentProps> = ({ setDrawerOpen }) =>
                                 </>
                             }
                             isFulWidth={true}
-                            type={'text'}
+                            type="text"
+                            error={Boolean(errors.branchNameTR)}
+                            helperText={errors.branchNameTR?.message}
                         />
                     )}
                 />
 
+                {/* Branch Address Fields */}
                 <Controller
                     name="branchAddressEN"
-                    control={control as UseFormControl<FormData>}
+                    control={control}
                     defaultValue=""
                     rules={{ required: 'Branch Address in English is required' }}
                     render={({ field }) => (
@@ -213,19 +216,21 @@ const AddBranchContent: React.FC<AddBranchContentProps> = ({ setDrawerOpen }) =>
                             {...field}
                             label={
                                 <>
-                                    Name Address In EN
+                                    Branch Address In EN
                                     <span style={{ color: colors.error?.main, margin: '8px' }}>*</span>
                                 </>
                             }
                             isFulWidth={true}
-                            type={'text'}
+                            type="text"
+                            error={Boolean(errors.branchAddressEN)}
+                            helperText={errors.branchAddressEN?.message}
                         />
                     )}
                 />
 
                 <Controller
                     name="branchAddressAR"
-                    control={control as UseFormControl<FormData>}
+                    control={control}
                     defaultValue=""
                     rules={{ required: 'Branch Address in Arabic is required' }}
                     render={({ field }) => (
@@ -233,19 +238,21 @@ const AddBranchContent: React.FC<AddBranchContentProps> = ({ setDrawerOpen }) =>
                             {...field}
                             label={
                                 <>
-                                    Name Address In AR
+                                    Branch Address In AR
                                     <span style={{ color: colors.error?.main, margin: '8px' }}>*</span>
                                 </>
                             }
                             isFulWidth={true}
-                            type={'text'}
+                            type="text"
+                            error={Boolean(errors.branchAddressAR)}
+                            helperText={errors.branchAddressAR?.message}
                         />
                     )}
                 />
 
                 <Controller
                     name="branchAddressTR"
-                    control={control as UseFormControl<FormData>}
+                    control={control}
                     defaultValue=""
                     rules={{ required: 'Branch Address in Turkish is required' }}
                     render={({ field }) => (
@@ -253,19 +260,22 @@ const AddBranchContent: React.FC<AddBranchContentProps> = ({ setDrawerOpen }) =>
                             {...field}
                             label={
                                 <>
-                                    Name Address In TR
+                                    Branch Address In TR
                                     <span style={{ color: colors.error?.main, margin: '8px' }}>*</span>
                                 </>
                             }
                             isFulWidth={true}
-                            type={'text'}
+                            type="text"
+                            error={Boolean(errors.branchAddressTR)}
+                            helperText={errors.branchAddressTR?.message}
                         />
                     )}
                 />
 
+                {/* Branch Description Fields */}
                 <Controller
                     name="branchDescriptionEN"
-                    control={control as UseFormControl<FormData>}
+                    control={control}
                     defaultValue=""
                     rules={{ required: 'Branch Description in English is required' }}
                     render={({ field }) => (
@@ -278,16 +288,18 @@ const AddBranchContent: React.FC<AddBranchContentProps> = ({ setDrawerOpen }) =>
                                 </>
                             }
                             isFulWidth={true}
-                            type={'text'}
+                            type="text"
                             multiline={true}
                             rows={4}
+                            error={Boolean(errors.branchDescriptionEN)}
+                            helperText={errors.branchDescriptionEN?.message}
                         />
                     )}
                 />
 
                 <Controller
                     name="branchDescriptionAR"
-                    control={control as UseFormControl<FormData>}
+                    control={control}
                     defaultValue=""
                     rules={{ required: 'Branch Description in Arabic is required' }}
                     render={({ field }) => (
@@ -300,16 +312,18 @@ const AddBranchContent: React.FC<AddBranchContentProps> = ({ setDrawerOpen }) =>
                                 </>
                             }
                             isFulWidth={true}
-                            type={'text'}
+                            type="text"
                             multiline={true}
                             rows={4}
+                            error={Boolean(errors.branchDescriptionAR)}
+                            helperText={errors.branchDescriptionAR?.message}
                         />
                     )}
                 />
 
                 <Controller
                     name="branchDescriptionTR"
-                    control={control as UseFormControl<FormData>}
+                    control={control}
                     defaultValue=""
                     rules={{ required: 'Branch Description in Turkish is required' }}
                     render={({ field }) => (
@@ -322,20 +336,25 @@ const AddBranchContent: React.FC<AddBranchContentProps> = ({ setDrawerOpen }) =>
                                 </>
                             }
                             isFulWidth={true}
-                            type={'text'}
+                            type="text"
                             multiline={true}
                             rows={4}
+                            error={Boolean(errors.branchDescriptionTR)}
+                            helperText={errors.branchDescriptionTR?.message}
                         />
                     )}
                 />
 
                 {/* Contact Numbers Section */}
-                <ContactNumbersSection control={control as UseFormControl<FormData>} />
+                <ContactNumbersSection
+                    control={control}
+                    setValue={setValue}
+                />
 
-                {/* Standard hours Section */}
+                {/* Standard Hours Section */}
                 <Controller
-                    name="selectedDays"
-                    control={control as UseFormControl<FormData>}
+                    name="availableHours"
+                    control={control}
                     defaultValue={[]}
                     render={({ field }) => (
                         <MDTextField
@@ -347,7 +366,7 @@ const AddBranchContent: React.FC<AddBranchContentProps> = ({ setDrawerOpen }) =>
                                 </>
                             }
                             isFulWidth={true}
-                            type={'text'}
+                            type="text"
                             hintText={'CONFIGURE THE STANDARD HOURS OF OPERATION'}
                             icon={isWeeklySelectorVisible ? <ArrowDropUp /> : <ArrowDropDown />}
                             onClick={handleShowViewStandardHours}
@@ -357,29 +376,29 @@ const AddBranchContent: React.FC<AddBranchContentProps> = ({ setDrawerOpen }) =>
 
                 {isWeeklySelectorVisible && (
                     <WeeklyTimeSelector
-                        selectedDays={selectedDays}
-                        onSelectedDaysChange={setSelectedDays}
+                        onChange={handleAvailableHoursChange}
                     />
                 )}
-
-                <Typography sx={{ typography: fonts.subtitle1 }}><>
-                    Set Loaction
+                <Typography sx={{ typography: fonts.subtitle1 }}>
+                    Set Location
                     <span style={{ color: colors.error?.main, margin: '8px' }}>*</span>
-                </></Typography>
-                <Map />
+                </Typography>
+                <Map onLocationChange={onMapLocationChange} />
 
                 <Box sx={{ py: 2 }} />
 
                 {/* Options */}
-                <Box sx={{
-                    display: 'flex',
-                    justifyContent: 'flex-end',
-                    p: 1,
-                    pb: 5,
-                }}>
+                <Box
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'flex-end',
+                        p: 1,
+                        pb: 5,
+                    }}
+                >
                     <PrimaryButton
                         title={'CANCEL'}
-                        fontType='subtitle2'
+                        fontType="subtitle2"
                         width={'15%'}
                         backgroundColor={colors.info?.light}
                         hoverColor={colors.info?.light}
@@ -391,7 +410,7 @@ const AddBranchContent: React.FC<AddBranchContentProps> = ({ setDrawerOpen }) =>
                     <Box p={1} />
                     <PrimaryButton
                         title={'Save'}
-                        fontType='subtitle2'
+                        fontType="subtitle2"
                         width={'15%'}
                         backgroundColor={colors.primary?.main}
                         hoverColor={colors.primary?.state}
@@ -399,8 +418,9 @@ const AddBranchContent: React.FC<AddBranchContentProps> = ({ setDrawerOpen }) =>
                         colorTitle={colors.background?.paper}
                         isIcon={false}
                         isTitleAndIcon={false}
-                        onClick={onSubmit}
+                        onClick={handleSubmit(onSubmit)}
                     />
+
                 </Box>
             </form>
         </Box>

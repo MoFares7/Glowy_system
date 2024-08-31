@@ -1,10 +1,14 @@
-import React, { useEffect, useRef, useState } from "react"; 
-import "./map.css";
+import React, { useEffect, useRef, useState } from "react";
+import "../style/map.css";
 import "maplibre-gl/dist/maplibre-gl.css";
 import maplibregl from "maplibre-gl";
 import { Box } from "@mui/material";
 
-export default function Map() {
+interface MapProps {
+  onLocationChange: (lat: number, lng: number) => void;
+}
+
+export default function Map({ onLocationChange }: MapProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<maplibregl.Map | null>(null);
   const marker = useRef<maplibregl.Marker | null>(null);
@@ -13,7 +17,7 @@ export default function Map() {
   const [lat, setLat] = useState(29.378586);
 
   useEffect(() => {
-    if (map.current || !mapContainer.current) return; // stops map from initializing more than once and checks for mapContainer
+    if (map.current || !mapContainer.current) return;
 
     map.current = new maplibregl.Map({
       container: mapContainer.current,
@@ -38,11 +42,12 @@ export default function Map() {
         marker.current.setLngLat([newLng, newLat]);
       }
 
-      // Update the state with new coordinates
       setLng(newLng);
       setLat(newLat);
+
+      onLocationChange(newLat, newLng);
     });
-  }, [lng, lat, zoom]);
+  }, [lng, lat, zoom, onLocationChange]);
 
   return (
     <Box className="map-wrap">

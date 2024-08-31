@@ -5,7 +5,7 @@ import { colors } from '../../../assets/theme/colors';
 import { borders } from '../../../assets/theme/borders';
 import image from '../../../assets/images/download.jpg';
 import PlusIcon from '../../../assets/icons/plus_black.svg';
-import PrimaryButton from '../../../components/Buttons/primary_button';
+import PrimaryButton from '../../../shared/components/Buttons/primary_button';
 
 const branches = [
     { id: 1, name: 'Mezzeh Branch', description: 'Mezzeh Mezzeh Branch', imageSrc: image, isSelect: true },

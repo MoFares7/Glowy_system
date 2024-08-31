@@ -1,11 +1,11 @@
 import React from 'react';
-import DashboardLayout from '../../../components/LayoutContainer/LayoutDashboard/index';
+import DashboardLayout from '../../../shared/components/LayoutContainer/LayoutDashboard/index';
 import { colors } from '../../../assets/theme/colors';
 import { Box } from '@mui/material';
 import AllBranchesSection from '../ui/all_branches_section';
 import SpecializersServicesBranch from '../components/specializers_services_branch';
 import useTabs from '../hook/use_tab';
-import MainTab from '../../../components/Tabs/index';
+import MainTab from '../../../shared/components/Tabs/index';
 import AppointmentsBranch from '../components/appointments_branch';
 import BalanceBranch from '../components/balance_branch';
 import SummaryBranch from '../components/summary_branch';
