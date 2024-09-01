@@ -15,17 +15,17 @@ type FormData = {
     availableHours: any[];
     latitude: number;
     longitude: number;
-    images: string[];
-    phoneNumbers: string[]; 
+    image: File | null;
+    phoneNumbers: any[];
     showInApp: number;
 };
 
 const useBranchForm = () => {
-    const [selectedImage, setSelectedImage] = useState<string | null>(null);
+    const [selectedImage, setSelectedImage] = useState<File | null>(null);
     const [latitude, setLatitude] = useState<number>(29.378586);
     const [longitude, setLongitude] = useState<number>(47.990341);
+    const [loading, setLoading] = useState<boolean>(false);
     const [createBranch] = useCreateBranchMutation();
-
 
     const {
         control,
@@ -40,9 +40,8 @@ const useBranchForm = () => {
     const handleImageChange = (event: ChangeEvent<HTMLInputElement>): void => {
         const file = event.target.files?.[0];
         if (file) {
-            const imageUrl = URL.createObjectURL(file);
-            setSelectedImage(imageUrl);
-            clearErrors('images');
+            setSelectedImage(file);
+            clearErrors('image');
         }
     };
 
@@ -55,7 +54,7 @@ const useBranchForm = () => {
 
     const handleRemoveImage = (): void => {
         setSelectedImage(null);
-        setError('images', {
+        setError('image', {
             type: 'manual',
             message: 'Image is required',
         });
@@ -69,47 +68,51 @@ const useBranchForm = () => {
 
     const onSubmit: SubmitHandler<FormData> = async (data) => {
         if (!selectedImage) {
-            setError('images', { type: 'manual', message: 'Image is required' });
+            setError('image', { type: 'manual', message: 'Image is required' });
             return;
         }
 
         try {
-            // Convert phoneNumbers array into the correct format
-            const phoneNumberFields: { [key: string]: string } = {};
+            setLoading(true);
+
+            const formData = new FormData();
+
+            formData.append('name_en', data.branchName);
+            formData.append('name_ar', data.branchNameAR);
+            formData.append('name_tr', data.branchNameTR);
+            formData.append('description_en', data.branchDescriptionEN);
+            formData.append('description_ar', data.branchDescriptionAR);
+            formData.append('description_tr', data.branchDescriptionTR);
+            formData.append('address_en', data.branchAddressEN);
+            formData.append('address_ar', data.branchAddressAR);
+            formData.append('address_tr', data.branchAddressTR);
+            formData.append('latitude', latitude.toString());
+            formData.append('longitude', longitude.toString());
+            formData.append('showInApp', '1');
+            formData.append('images', selectedImage);
+
+            data.availableHours.forEach((hour, index) => {
+                formData.append(`availableHours[${index}]`, JSON.stringify(hour));
+            });
+
             data.phoneNumbers.forEach((number, index) => {
-                phoneNumberFields[`phoneNumbers[${index}]`] = number;
+                const formattedNumber = number;
+                formData.append(`phoneNumbers[${index}]`, formattedNumber);
+                console.log(typeof formattedNumber)
             });
 
-            // Convert availableHours array into the correct format
-            const availableHoursFields: { [key: string]: any } = {};
-            data.availableHours.forEach((hours, index) => {
-                availableHoursFields[`availableHours[${index}]`] = hours;
-            });
+            console.log('FormData contents:');
+            for (let [key, value] of formData.entries()) {
+                console.log(`${key}: ${value}`);
+            }
 
-            const apiData = {
-                name_en: data.branchName,
-                name_ar: data.branchNameAR,
-                name_tr: data.branchNameTR,
-                description_en: data.branchDescriptionEN,
-                description_ar: data.branchDescriptionAR,
-                description_tr: data.branchDescriptionTR,
-                address_en: data.branchAddressEN,
-                address_ar: data.branchAddressAR,
-                address_tr: data.branchAddressTR,
-                latitude: data.latitude,
-                longitude: data.longitude,
-                showInApp: data.showInApp,
-                images: [selectedImage],
-                ...availableHoursFields, 
-                ...phoneNumberFields, 
-            };
-
-            console.log('Submitting data:', JSON.stringify(apiData, null, 2));
-            const response = await createBranch(apiData).unwrap();
+            const response = await createBranch(formData).unwrap();
             console.log('Branch created successfully:', response);
 
             reset();
+            setLoading(false);
         } catch (error) {
+            setLoading(false);
             console.error('Failed to create branch:', error);
         }
     };
@@ -123,8 +126,9 @@ const useBranchForm = () => {
         handleButtonClick,
         handleRemoveImage,
         onSubmit,
-        onMapLocationChange,
         setValue,
+        loading,
+        onMapLocationChange,
     };
 };
 

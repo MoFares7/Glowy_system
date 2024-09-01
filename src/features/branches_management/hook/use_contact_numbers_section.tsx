@@ -5,16 +5,13 @@ const useContactNumbers = (setValue?: (name: string, value: any) => void) => {
     const [newContactNumber, setNewContactNumber] = useState('');
 
     const handleAddContactNumber = () => {
-        if (newContactNumber.trim() !== '') {
-            const updatedNumbers = [...contactNumbers, newContactNumber.trim()];
+        if (newContactNumber !== '') {
+            const updatedNumbers = [...contactNumbers, newContactNumber];
             setContactNumbers(updatedNumbers);
             setNewContactNumber('');
             if (setValue) {
                 setValue('phoneNumbers', updatedNumbers);
             }
-           
-            console.log(`New contact number added: ${newContactNumber.trim()}`);
-            console.log(`Updated contact numbers: ${updatedNumbers.join(', ')}`);
         }
     };
 

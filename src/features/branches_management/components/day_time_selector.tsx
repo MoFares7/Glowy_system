@@ -13,7 +13,7 @@ const WeeklyTimeSelector: React.FC<WeeklyTimeSelectorProps> = ({ onChange }) => 
     const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const [selectedDays, setSelectedDays] = useState<Record<string, { isOpen: boolean, from: string, to: string }>>(() => {
         return days.reduce((acc, day) => {
-            acc[day] = { isOpen: false, from: '08:00', to: '17:00' };
+            acc[day] = { isOpen: false, from: '09:00', to: '21:00' };
             return acc;
         }, {} as Record<string, { isOpen: boolean, from: string, to: string }>);
     });

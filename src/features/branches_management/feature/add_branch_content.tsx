@@ -14,10 +14,6 @@ import WeeklyTimeSelector from '../components/day_time_selector';
 import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material';
 import Map from '../hook/Map';
 
-interface AddBranchContentProps {
-    setDrawerOpen: (isOpen: boolean) => void;
-}
-
 const AddBranchContent: React.FC<{ setDrawerOpen: (isOpen: boolean) => void }> = ({ setDrawerOpen }) => {
     const {
         selectedImage,
@@ -29,7 +25,8 @@ const AddBranchContent: React.FC<{ setDrawerOpen: (isOpen: boolean) => void }> =
         onSubmit,
         errors,
         onMapLocationChange,
-        setValue
+        setValue,
+        loading
     } = useBranchForm();
 
     const [isWeeklySelectorVisible, setIsWeeklySelectorVisible] = useState<boolean>(false);
@@ -81,8 +78,8 @@ const AddBranchContent: React.FC<{ setDrawerOpen: (isOpen: boolean) => void }> =
                     my: 2,
                     height: '250px',
                     textAlign: 'center',
-                    border: `1px solid ${colors.secondary?.light}`,
-                    borderRadius: borders.borderRadius.sm,
+                    border: `1px solid #ddd`,
+                    borderRadius: '4px',
                     overflow: 'hidden',
                 }}
             >
@@ -95,13 +92,13 @@ const AddBranchContent: React.FC<{ setDrawerOpen: (isOpen: boolean) => void }> =
                                 position: 'absolute',
                                 top: 8,
                                 right: 8,
-                                backgroundColor: colors.background?.paper,
+                                backgroundColor: 'white',
                                 '&:hover': {
-                                    backgroundColor: colors.background?.paper,
+                                    backgroundColor: 'white',
                                 },
                             }}
                         >
-                            <CloseIcon sx={{ color: colors.error?.main }} />
+                            <CloseIcon sx={{ color: 'red' }} />
                         </IconButton>
                     </>
                 ) : (
@@ -419,6 +416,7 @@ const AddBranchContent: React.FC<{ setDrawerOpen: (isOpen: boolean) => void }> =
                         isIcon={false}
                         isTitleAndIcon={false}
                         onClick={handleSubmit(onSubmit)}
+                        loading={loading}
                     />
 
                 </Box>

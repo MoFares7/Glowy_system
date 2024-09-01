@@ -36,8 +36,11 @@ const ContactNumbersSection: React.FC<ContactNumbersSectionProps> = ({ control, 
                             {...field}
                             value={newContactNumber}
                             hintText={'ADD MANY CONTACT NUMBERS'}
-                            type={'number'}
-                            onChange={(e) => setNewContactNumber(e.target.value)}
+                            type={'text'}
+                            onChange={(e) => {
+                                console.log(e.target.value)
+                                setNewContactNumber(e.target.value)
+                            }}
                             isFulWidth={true}
                         />
                     )}

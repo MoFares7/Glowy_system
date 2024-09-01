@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Box, Typography, TypographyProps } from '@mui/material';
+import { Button, Box, CircularProgress, Typography } from '@mui/material';
 import { borders } from '../../../assets/theme/borders';
 import { colors } from '../../../assets/theme/colors';
 
@@ -18,6 +18,7 @@ interface PrimaryButtonProps {
     icon?: string;
     fontSize?: string | number;
     onClick?: () => void;
+    loading?: boolean; 
 }
 
 const PrimaryButton: React.FC<PrimaryButtonProps> = ({
@@ -34,7 +35,8 @@ const PrimaryButton: React.FC<PrimaryButtonProps> = ({
     isIcon = false,
     icon,
     fontSize,
-    onClick
+    onClick,
+    loading,
 }) => {
     return (
         <Button
@@ -57,7 +59,9 @@ const PrimaryButton: React.FC<PrimaryButtonProps> = ({
                 },
             }}
         >
-            {isIcon ? (
+            {loading ? (
+                <CircularProgress size={24} sx={{ color: colors.background?.paper }} />
+            ) : isIcon ? (
                 <img src={icon} alt="icon" style={{ width: 24, height: 24 }} />
             ) : (
                 <Box display="flex" alignItems="center">

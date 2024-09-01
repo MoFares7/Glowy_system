@@ -36,7 +36,7 @@ const BranchCard: React.FC<BranchCardProps> = ({ image, title, subTitle, status 
       px: 2,
       border: `1px solid ${colors.secondary?.main}`,
       position: 'relative',
-      maxWidth: 250, 
+      maxWidth: 250,
     }}>
       <IconButton
         sx={{ position: 'absolute', top: 8, right: 8 }}
@@ -48,17 +48,17 @@ const BranchCard: React.FC<BranchCardProps> = ({ image, title, subTitle, status 
         mb: 2,
         '& img': {
           width: '100%',
-          height: 'auto', // Maintain aspect ratio
-          maxWidth: 100, // Set a max width
-          maxHeight: 100, // Set a max height
+          height: 'auto', 
+          maxWidth: 100, 
+          maxHeight: 100, 
           objectFit: 'cover',
           borderRadius: borders.borderRadius.md,
         }
       }}>
-        <img 
-          src={imageUrl} 
-          alt={title} 
-        //   onError={(e) => (e.currentTarget.src = '/path/to/fallback-image.jpg')} // Fallback image
+        <img
+          src={imageUrl}
+          alt={title}
+          crossOrigin="anonymous"
         />
       </Box>
 
