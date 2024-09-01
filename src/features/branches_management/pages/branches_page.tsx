@@ -8,6 +8,7 @@ import BranchCard from '../ui/branch_card';
 import AddBranchContent from '../feature/add_branch_content';
 import Footer from '../../../shared/components/Footer/footer';
 import useBranches from '../hook/use_branch';
+import LoaderCard from '../../../shared/components/Handle/loader';
 
 const BranchesPage: React.FC = () => {
   const {
@@ -35,7 +36,7 @@ const BranchesPage: React.FC = () => {
         />
         {isLoading ? (
           <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '200px' }}>
-            <CircularProgress />
+            <LoaderCard />
           </Box>
         ) : isError ? (
           <Typography color="error" variant="h6" align="center">

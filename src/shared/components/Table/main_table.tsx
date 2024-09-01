@@ -11,12 +11,11 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import { Box, IconButton } from '@mui/material';
 import { colors } from '../../../assets/theme/colors';
 import { borders } from '../../../assets/theme/borders';
-import person from '../../../assets/images/image.png';
 import moreActionIcon from '../../../assets/icons/moreOption.svg';
 import sortIcon from '../../../assets/icons/sort.svg';
 import { useTableLogic } from '../../hook/use_table';
+import { getImageUrl } from '../../../util/helper';
 
-// Define the structure of a single row in the table
 interface Row {
     image: string;
     branchName: string;
@@ -28,14 +27,12 @@ interface Row {
     action: string;
 }
 
-// Define the props for the MainInformationTable component
 interface MainInformationTableProps {
     selected: string[];
     onSelect: (selected: string[]) => void;
-    rows: Row[]; // Accept rows as a prop
+    rows: Row[];
 }
 
-// Styled components for TableCell and TableRow
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
         backgroundColor: '#F1F1F1',
@@ -59,7 +56,6 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     cursor: 'pointer',
 }));
 
-// MainInformationTable Component
 const MainInformationTable: React.FC<MainInformationTableProps> = ({ selected, onSelect, rows }) => {
     const {
         order,
@@ -173,7 +169,7 @@ const MainInformationTable: React.FC<MainInformationTableProps> = ({ selected, o
                             </StyledTableCell>
                             <StyledTableCell component="th" scope="row">
                                 <img
-                                    src={row.image}
+                                    src={getImageUrl(row.image)}
                                     alt={row.branchName}
                                     style={{ width: '50px', height: '50px', borderRadius: '50%' }}
                                 />

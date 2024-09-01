@@ -1,57 +1,66 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Box, Checkbox, Typography } from '@mui/material';
 import { colors } from '../../../assets/theme/colors';
 import { fonts } from '../../../assets/theme/fonts';
 import { borders } from '../../../assets/theme/borders';
 import MDTextField from '../../../shared/components/TextField/text_field';
+import useWeeklyTimeSelector from '../hook/use_day_time_selector';
 
 interface WeeklyTimeSelectorProps {
     onChange: (hours: any[]) => void;
 }
 
 const WeeklyTimeSelector: React.FC<WeeklyTimeSelectorProps> = ({ onChange }) => {
-    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    const [selectedDays, setSelectedDays] = useState<Record<string, { isOpen: boolean, from: string, to: string }>>(() => {
-        return days.reduce((acc, day) => {
-            acc[day] = { isOpen: false, from: '09:00', to: '21:00' };
-            return acc;
-        }, {} as Record<string, { isOpen: boolean, from: string, to: string }>);
-    });
+    const { days, selectedDays, handleSelectAll, handleClearAll, handleToggleDay } = useWeeklyTimeSelector();
 
-    const handleToggleDay = (day: string, isOpen: boolean, from?: string, to?: string) => {
-        setSelectedDays((prev) => {
-            const updatedDays = {
-                ...prev,
-                [day]: { isOpen, from: from ?? prev[day].from, to: to ?? prev[day].to },
-            };
+    const handleDayToggle = (day: string, isOpen: boolean, from?: string, to?: string) => {
+        handleToggleDay(day, isOpen);
+        const availableHours = days
+            .filter(d => selectedDays[d])
+            .map(d => ({
+                day: d.toUpperCase(),
+                from: from ?? '09:00',
+                to: to ?? '21:00',
+                partitionRatio: 1,
+                unit: 'HOUR',
+                isLimittedAppointment: false,
+                maxApointmentPerRatio: 20,
+            }));
 
-            const availableHours = Object.keys(updatedDays)
-                .filter((d) => updatedDays[d].isOpen)
-                .map((d) => ({
-                    day: d.toUpperCase(),
-                    from: updatedDays[d].from,
-                    to: updatedDays[d].to,
-                    partitionRatio: 1,
-                    unit: 'HOUR',
-                    isLimittedAppointment: false,
-                    maxApointmentPerRatio: 20,
-                }));
+        onChange(availableHours);
+    };
 
-            onChange(availableHours);
-            return updatedDays;
-        });
+    const formatSelectedOptions = () => {
+        return days
+            .filter(d => selectedDays[d])
+            .map(d => `${d}: 09:00 - 21:00`)
+            .join(', ');
     };
 
     return (
         <Box sx={{ p: 2, border: `1px solid ${colors.secondary?.light}`, borderRadius: borders.borderRadius.xs }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', px: 1 }}>
+                <Typography
+                    sx={{ typography: fonts.subtitle2, cursor: 'pointer' }}
+                    onClick={handleSelectAll}
+                >
+                    SELECT ALL
+                </Typography>
+                <Typography
+                    sx={{ typography: fonts.subtitle2, opacity: '0.5', cursor: 'pointer' }}
+                    onClick={handleClearAll}
+                >
+                    CLEAR
+                </Typography>
+            </Box>
             {days.map((day) => (
                 <DayTimeSelector
                     key={day}
                     day={day}
-                    isOpen={selectedDays[day].isOpen}
-                    from={selectedDays[day].from}
-                    to={selectedDays[day].to}
-                    onToggle={handleToggleDay}
+                    isOpen={selectedDays[day]}
+                    from={'09:00'}
+                    to={'21:00'}
+                    onToggle={handleDayToggle}
                 />
             ))}
         </Box>

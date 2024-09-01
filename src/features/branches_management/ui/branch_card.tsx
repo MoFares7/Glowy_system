@@ -4,6 +4,7 @@ import { colors } from '../../../assets/theme/colors';
 import { borders } from '../../../assets/theme/borders';
 import { MoreVertOutlined } from '@mui/icons-material';
 import { fonts } from '../../../assets/theme/fonts';
+import { getImageUrl } from '../../../util/helper';
 
 interface BranchCardProps {
   image: string;
@@ -24,12 +25,14 @@ const BranchCard: React.FC<BranchCardProps> = ({ image, title, subTitle, status 
     setAnchorEl(null);
   };
 
-  const baseUrl = 'https://194.233.86.4:8091/uploads/';
-
-  const imageUrl = `${baseUrl}${image}`;
+  const imageUrl = getImageUrl(image);
 
   return (
     <Box sx={{
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
       borderRadius: borders.borderRadius.sm,
       textAlign: 'center',
       py: 3,
@@ -48,9 +51,9 @@ const BranchCard: React.FC<BranchCardProps> = ({ image, title, subTitle, status 
         mb: 2,
         '& img': {
           width: '100%',
-          height: 'auto', 
-          maxWidth: 100, 
-          maxHeight: 100, 
+          height: 100,
+          maxWidth: 100,
+          maxHeight: 550,
           objectFit: 'cover',
           borderRadius: borders.borderRadius.md,
         }
@@ -66,8 +69,8 @@ const BranchCard: React.FC<BranchCardProps> = ({ image, title, subTitle, status 
       <Typography sx={{ typography: fonts.subtitle1, color: colors.text?.secondary }}>{subTitle}</Typography>
 
       <Box sx={{
+        width: '50%',
         mt: 2,
-        mx: 10,
         py: 0.5,
         borderRadius: borders.borderRadius.lg,
         color: status === 'Active' ? colors.success?.main : colors.error?.main,

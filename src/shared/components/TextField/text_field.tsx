@@ -19,8 +19,10 @@ interface MDTextFieldProps {
     rows?: number;
     defaultValue?: string;
     icon?: ReactNode;
-    selectedOptions?: string[];
+    selectedOptions?: any[]; 
+    isDisable?: boolean;
     onClick?: () => void;
+    helperText?: string; 
 }
 
 const MDTextField: React.FC<MDTextFieldProps> = ({
@@ -38,9 +40,15 @@ const MDTextField: React.FC<MDTextFieldProps> = ({
     rows,
     defaultValue,
     icon,
+    isDisable = false,
     selectedOptions,
     onClick,
+    helperText, // Add this line
 }) => {
+    const selectedOptionsText = Array.isArray(selectedOptions) 
+        ? selectedOptions.map((option: any) => `${option.day}: ${option.from} - ${option.to}`).join(', ')
+        : '';
+
     return (
         <>
             {label && (
@@ -51,9 +59,10 @@ const MDTextField: React.FC<MDTextFieldProps> = ({
             <TextField
                 margin="normal"
                 required
+                disabled={isDisable}
                 placeholder={hintText}
                 fullWidth={isFulWidth}
-                value={value}
+                value={value || selectedOptionsText} // Use selectedOptionsText if value is not provided
                 type={type}
                 defaultValue={defaultValue}
                 autoComplete={autoComplete}
@@ -102,12 +111,8 @@ const MDTextField: React.FC<MDTextFieldProps> = ({
                     ) : null,
                 }}
                 onClick={onClick}
+                helperText={helperText} 
             />
-            {selectedOptions && (
-                <Box sx={{ mt: 1 }}>
-                    <Typography>{selectedOptions.join(', ')}</Typography>
-                </Box>
-            )}
         </>
     );
 };

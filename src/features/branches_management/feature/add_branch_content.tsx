@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Divider, IconButton, Typography } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { Controller } from 'react-hook-form';
@@ -13,8 +13,20 @@ import ContactNumbersSection from '../components/contact_numbers_section';
 import WeeklyTimeSelector from '../components/day_time_selector';
 import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material';
 import Map from '../hook/Map';
+import { useGetAllBranchesQuery } from '../apis/branch_api';
 
 const AddBranchContent: React.FC<{ setDrawerOpen: (isOpen: boolean) => void }> = ({ setDrawerOpen }) => {
+    const [isWeeklySelectorVisible, setIsWeeklySelectorVisible] = useState<boolean>(false);
+    const [availableHours, setAvailableHours] = useState<any[]>([]);
+    const [imageUrl, setImageUrl] = useState<string | null>(null);
+
+    const { refetch: fetchBranches } = useGetAllBranchesQuery();
+
+    const handleSuccess = () => {
+        setDrawerOpen(false);
+        fetchBranches();
+    };
+
     const {
         selectedImage,
         control,
@@ -24,13 +36,23 @@ const AddBranchContent: React.FC<{ setDrawerOpen: (isOpen: boolean) => void }> =
         handleRemoveImage,
         onSubmit,
         errors,
-        onMapLocationChange,
         setValue,
-        loading
-    } = useBranchForm();
+        loading,
+        onMapLocationChange,
+    } = useBranchForm(handleSuccess);
 
-    const [isWeeklySelectorVisible, setIsWeeklySelectorVisible] = useState<boolean>(false);
-    const [availableHours, setAvailableHours] = useState<any[]>([]);
+    useEffect(() => {
+        if (selectedImage) {
+            const url = URL.createObjectURL(selectedImage);
+            setImageUrl(url);
+
+            return () => {
+                URL.revokeObjectURL(url);
+            };
+        } else {
+            setImageUrl(null);
+        }
+    }, [selectedImage]);
 
     const handleShowViewStandardHours = () => {
         setIsWeeklySelectorVisible(prevState => !prevState);
@@ -83,9 +105,9 @@ const AddBranchContent: React.FC<{ setDrawerOpen: (isOpen: boolean) => void }> =
                     overflow: 'hidden',
                 }}
             >
-                {selectedImage ? (
+                {imageUrl ? (
                     <>
-                        <img src={selectedImage} alt="Selected" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                        <img src={imageUrl} alt="Selected" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                         <IconButton
                             onClick={handleRemoveImage}
                             sx={{
@@ -140,7 +162,7 @@ const AddBranchContent: React.FC<{ setDrawerOpen: (isOpen: boolean) => void }> =
                     name="branchName"
                     control={control}
                     defaultValue=""
-                    rules={{ required: 'Branch Name in English is required' }}
+                    rules={{ required: 'This Field Is Required' }}
                     render={({ field }) => (
                         <MDTextField
                             {...field}
@@ -162,7 +184,7 @@ const AddBranchContent: React.FC<{ setDrawerOpen: (isOpen: boolean) => void }> =
                     name="branchNameAR"
                     control={control}
                     defaultValue=""
-                    rules={{ required: 'Branch Name in Arabic is required' }}
+                    rules={{ required: 'This Field Is Required' }}
                     render={({ field }) => (
                         <MDTextField
                             {...field}
@@ -184,7 +206,7 @@ const AddBranchContent: React.FC<{ setDrawerOpen: (isOpen: boolean) => void }> =
                     name="branchNameTR"
                     control={control}
                     defaultValue=""
-                    rules={{ required: 'Branch Name in Turkish is required' }}
+                    rules={{ required: 'This Field Is Required' }}
                     render={({ field }) => (
                         <MDTextField
                             {...field}
@@ -207,7 +229,7 @@ const AddBranchContent: React.FC<{ setDrawerOpen: (isOpen: boolean) => void }> =
                     name="branchAddressEN"
                     control={control}
                     defaultValue=""
-                    rules={{ required: 'Branch Address in English is required' }}
+                    rules={{ required: 'This Field Is Required' }}
                     render={({ field }) => (
                         <MDTextField
                             {...field}
@@ -229,7 +251,7 @@ const AddBranchContent: React.FC<{ setDrawerOpen: (isOpen: boolean) => void }> =
                     name="branchAddressAR"
                     control={control}
                     defaultValue=""
-                    rules={{ required: 'Branch Address in Arabic is required' }}
+                    rules={{ required: 'This Field Is Required' }}
                     render={({ field }) => (
                         <MDTextField
                             {...field}
@@ -251,7 +273,7 @@ const AddBranchContent: React.FC<{ setDrawerOpen: (isOpen: boolean) => void }> =
                     name="branchAddressTR"
                     control={control}
                     defaultValue=""
-                    rules={{ required: 'Branch Address in Turkish is required' }}
+                    rules={{ required: 'This Field Is Required' }}
                     render={({ field }) => (
                         <MDTextField
                             {...field}
@@ -274,7 +296,7 @@ const AddBranchContent: React.FC<{ setDrawerOpen: (isOpen: boolean) => void }> =
                     name="branchDescriptionEN"
                     control={control}
                     defaultValue=""
-                    rules={{ required: 'Branch Description in English is required' }}
+                    rules={{ required: 'This Field Is Required' }}
                     render={({ field }) => (
                         <MDTextField
                             {...field}
@@ -298,7 +320,7 @@ const AddBranchContent: React.FC<{ setDrawerOpen: (isOpen: boolean) => void }> =
                     name="branchDescriptionAR"
                     control={control}
                     defaultValue=""
-                    rules={{ required: 'Branch Description in Arabic is required' }}
+                    rules={{ required: 'This Field Is Required' }}
                     render={({ field }) => (
                         <MDTextField
                             {...field}
@@ -322,7 +344,7 @@ const AddBranchContent: React.FC<{ setDrawerOpen: (isOpen: boolean) => void }> =
                     name="branchDescriptionTR"
                     control={control}
                     defaultValue=""
-                    rules={{ required: 'Branch Description in Turkish is required' }}
+                    rules={{ required: 'This Field Is Required' }}
                     render={({ field }) => (
                         <MDTextField
                             {...field}
@@ -353,9 +375,11 @@ const AddBranchContent: React.FC<{ setDrawerOpen: (isOpen: boolean) => void }> =
                     name="availableHours"
                     control={control}
                     defaultValue={[]}
+                    rules={{ required: 'This Field Is Required' }}
                     render={({ field }) => (
                         <MDTextField
                             {...field}
+                            isDisable={true}
                             label={
                                 <>
                                     Set Standard Hours
@@ -364,12 +388,16 @@ const AddBranchContent: React.FC<{ setDrawerOpen: (isOpen: boolean) => void }> =
                             }
                             isFulWidth={true}
                             type="text"
+                            value=''
                             hintText={'CONFIGURE THE STANDARD HOURS OF OPERATION'}
                             icon={isWeeklySelectorVisible ? <ArrowDropUp /> : <ArrowDropDown />}
+                            error={Boolean(errors.availableHours)}
+                            helperText={errors.availableHours?.message}
                             onClick={handleShowViewStandardHours}
                         />
                     )}
                 />
+
 
                 {isWeeklySelectorVisible && (
                     <WeeklyTimeSelector
